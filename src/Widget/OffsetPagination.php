@@ -19,6 +19,7 @@ class OffsetPagination extends Widget
     private int $currentPage;
     private array $pages;
     private bool $prepared;
+    private bool $encodeTags = false;
 
     public function paginator(?Paginator $paginator): self
     {
@@ -62,15 +63,29 @@ class OffsetPagination extends Widget
         $this->initOptions();
         $this->prepareButtons();
 
-        $this->registerPlugin('offset-pagination', $this->options);
+        Html::addCssClass($this->options, ['widget' => 'offset-pagination']);
 
-        return implode("\n", [
-            Html::beginTag('nav', $this->options),
-            Html::beginTag('ul', ['class' => 'pagination']),
-            $this->renderButtons(),
-            Html::endTag('ul'),
-            Html::endTag('nav'),
-        ]);
+        if ($this->encodeTags === false) {
+            $this->options['encode'] = false;
+        }
+
+        return Html::div(
+            $this->renderHeader().$this->renderButtons().$this->renderFooter(),
+            $this->options
+        );
+    }
+
+    /**
+     * Allows you to enable or disable the encoding tags html.
+     *
+     * @return self
+     */
+    public function withEncodeTags(): self
+    {
+        $new = clone $this;
+        $new->encodeTags = true;
+
+        return $new;
     }
 
     protected function prepareButtons(): void
@@ -102,6 +117,26 @@ class OffsetPagination extends Widget
             $this->pages = range(1, $this->pagesCount);
         }
         $this->prepared = true;
+    }
+
+    protected function renderHeader(): string
+    {
+        $result = '';
+
+        $result .= Html::beginTag('nav', $this->options);
+        $result .= Html::beginTag('ul', ['class' => 'pagination']);
+
+        return $result;
+    }
+
+    protected function renderFooter(): string
+    {
+        $result = '';
+
+        $result .= Html::endTag('ul');
+        $result .= Html::endTag('nav');        
+
+        return $result;
     }
 
     protected function renderButtons(): string

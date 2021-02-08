@@ -13,6 +13,8 @@ class PostCard extends Widget
 {
     private ?Post $post = null;
 
+    private bool $encodeTags = false;
+
     private array $options = [];
 
     private UrlGeneratorInterface $urlGenerator;
@@ -30,9 +32,18 @@ class PostCard extends Widget
 
         $this->initOptions();
 
-        $this->registerPlugin('page-card', $this->options);
+        Html::addCssClass($this->options, ['widget' => 'post-card']);
 
-        return implode("\n", [
+        if ($this->encodeTags === false) {
+            $this->options['encode'] = false;
+        }
+
+        return Html::div(
+            $this->renderHead() . $this->renderBody() . $this->renderTags(),
+            $this->options
+        );
+
+        /*return implode("\n", [
             Html::beginTag('div', $this->options),
             Html::beginTag('div', ['class' => 'card-body d-flex flex-column align-items-start']),
             $this->renderHead(),
@@ -40,7 +51,20 @@ class PostCard extends Widget
             $this->renderTags(),
             Html::endTag('div'),
             Html::endTag('div'),
-        ]);
+        ]);*/
+    }
+
+    /**
+     * Allows you to enable or disable the encoding tags html.
+     *
+     * @return self
+     */
+    public function withEncodeTags(): self
+    {
+        $new = clone $this;
+        $new->encodeTags = true;
+
+        return $new;
     }
 
     protected function renderHead(): string
@@ -54,17 +78,22 @@ class PostCard extends Widget
 
     protected function renderBody(): string
     {
-        return Html::div(
-            $this->post->getPublishedAt()->format('M, d') . ' by ' . Html::a(
+        $return = '';
+        $return .= Html::beginTag('div',['class' => 'mb-1 text-muted']);
+        $return .= $this->post->getPublishedAt()->format('M, d') . ' by ' . Html::a(
                 Html::encode($this->post->getUser()->getLogin()),
                 $this->urlGenerator->generate('user/profile', ['login' => $this->post->getUser()->getLogin()])
-            ),
-            ['class' => 'mb-1 text-muted']
-        ) . Html::p(
+        );
+            
+        $return .= Html::p(
             Html::encode(mb_substr($this->post->getContent(), 0, 400))
             . (mb_strlen($this->post->getContent()) > 400 ? '…' : ''),
             ['class' => 'card-text mb-auto']
         );
+
+        $return .= Html::endTag('div');
+
+        return $return;
     }
 
     protected function renderTags(): string

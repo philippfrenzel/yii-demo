@@ -5,19 +5,19 @@ declare(strict_types=1);
 use Yiisoft\Yii\Bootstrap5\Carousel;
 
 echo Carousel::widget()
-    ->items([
+    ->withItems([
         [
-            'content' => '<div class="d-block w-100 bg-info" style="height: 200px"></div>',
+            'content' => '<div class="d-block w-100 bg-info" style="height: 300px"></div>',
             'caption' => '<h5>First slide label</h5><p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>',
             'captionOptions' => ['class' => ['d-none', 'd-md-block']],
         ],
         [
-            'content' => '<div class="d-block w-100 bg-secondary" style="height: 200px"></div>',
+            'content' => '<div class="d-block w-100 bg-secondary" style="height: 300px"></div>',
             'caption' => '<h5>Second slide label</h5><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>',
             'captionOptions' => ['class' => ['d-none', 'd-md-block']],
         ],
         [
-            'content' => '<div class="d-block w-100 bg-dark" style="height: 200px"></div>',
+            'content' => '<div class="d-block w-100 bg-dark" style="height: 300px"></div>',
             'caption' => '<h5>Third slide label</h5><p>Praesent commodo cursus magna, vel scelerisque nisl.</p>',
             'captionOptions' => ['class' => ['d-none', 'd-md-block']],
         ],
