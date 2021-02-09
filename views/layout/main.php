@@ -51,7 +51,7 @@ $this->beginBody();
 echo NavBar::widget()
       ->brandLabel($brandLabel)
       ->brandUrl($urlGenerator->generate('site/index'))
-      ->options(['class' => 'navbar navbar-light bg-light navbar-expand-sm text-white'])
+      ->options(['class' => 'navbar navbar-light navbar-expand-sm text-black', "style" => "background-color: #79dfc1;"])
       ->begin();
 echo Nav::widget()
         ->currentPath($urlMatcher->getCurrentUri()->getPath())
@@ -84,11 +84,11 @@ echo Nav::widget()
         );
 echo NavBar::end();
 
-?><main class="container py-4"><?php
+?><main class="container-xl"><?php
 echo $content;
 ?></main>
 
-<footer class="container py-4">
+<footer class="container-xl">
     <?= PerformanceMetrics::widget() ?>
 </footer>
 <?php
